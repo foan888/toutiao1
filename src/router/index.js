@@ -2,18 +2,23 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 // import Home from '../views/Home.vue'
 import Home from '@/views/home'// 简写模式替换原有方式
-
+import Login from '@/views/login'
 Vue.use(VueRouter)
 
 const routes = [
   {
-    pash: '/',
+    path: '/',
     redirect: '/home' // 强制跳转到home页面
   },
   {
     path: '/home',
     name: 'Home',
     component: Home
+  },
+  {
+    path: '/login',
+    component: Login,
+    name: 'login'
   }
   // {
   //   path: '/about',
