@@ -59,7 +59,18 @@ export default {
       display: flex;
       justify-content: center;
       align-items: center;
+      &:before {
+        content: '123';
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        background-image: url('../../assets/img/02.jpg');
+        filter:blur(5px);
+        background-size: cover;
+      }
       .login-card {
+          background: rgba(0,0,0,0);
+          z-index: 2;
           width: 440px;
           height: 340px;
           .title {
