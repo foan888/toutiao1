@@ -7,12 +7,12 @@
       <div class="title">
         <img src="../../assets/img/logo_index.png" alt="">
       </div>
-      <!-- 表单 绑定model属性 绑定rules属性（表单验证规则）-->
+      <!-- 表单 绑定model属性 绑定rules属性（表单验证规则） ref 给el-form一个熟悉-->
       <el-form ref="loginForm" :model="loginForm" :rules="loginRules" style="margin-top:20px">
           <!-- 表单容器 设置prop属性 prop表示要校验的字段名-->
           <el-form-item prop="mobile">
               <!-- 表单域 v-model双向绑定-->
-              <el-input v-model="loginForm.mible" placeholder="请输入手机号"></el-input>
+              <el-input v-model="loginForm.mobile" placeholder="请输入手机号"></el-input>
           </el-form-item>
           <!-- 验证码 -->
           <el-form-item prop="code">
@@ -72,6 +72,7 @@ export default {
   methods: {
     login () {
       // this.$refs.loginForm 获取就是el-form 的对象实例
+    //   第一种 回调函数 isOK fields(没有校验通过的字段)
     //   this.$refs.loginForm.validate(function (isOK) {
     //     if (isOK) {
     //         console.log("校验通过")
@@ -82,6 +83,25 @@ export default {
     // 第二种方式 promise
       this.$refs.loginForm.validate().then(() => {
         // 如果成功通过 校验就会到达 then
+        // 通过校验之后 应该做什么事 => 应该调用登录接口 看看手机号是否正常
+        // this.$axios.get/post/delete/put
+        this.$axios({
+          url: '/authorizations', // 请求地址
+          data: this.loginForm,
+          // data：{...this.loginForm, checked: null },//body 请求体参数
+          method: 'post'
+        }).then(result => {
+          // 成功之后打印结果
+          // 把钥匙放在兜里 也就是把token存于本地 本地缓存
+          window.localStorage.setItem('user-token', result.data.data.token)
+          //   跳转到主页
+          this.$router.push('/home') // push 和 router-link 类似 to属性 可直接是字符串 也可以是对象
+        }).catch(() => {
+          // 提示方法
+          // 第一种用法
+          // this.$message({ message:'用户名或密码错误',type：'error' })
+          this.$message.error('用户名或密码错误')
+        })
       })
     }
   }
